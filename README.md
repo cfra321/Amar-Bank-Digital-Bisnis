@@ -1,9 +1,7 @@
-# Amar-Bank-Digital-Bisnis
-```markdown
 /**
  * Project: AMAR-BANK-DIGITAL-BISNIS
  * 
- * This project is designed to handle the digital banking operations for Amar Bank.
+ * This project is designed to handle digital banking operations for Amar Bank.
  * It includes functionalities such as account management, transaction processing,
  * customer service, and reporting.
  * 
@@ -157,4 +155,3 @@
     ```
 
 Pastikan untuk mengganti [Your Name] dan [Date] dengan informasi yang sesuai. Dokumentasi ini memberikan gambaran umum tentang bagaimana menggunakan API dari proyek Anda. Anda bisa menambahkan lebih banyak detail sesuai kebutuhan proyek Anda.
-```
