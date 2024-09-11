@@ -21,7 +21,7 @@ Sistem ini memiliki tabel-tabel berikut:
 <li>Tabel transactions_log</li>
 <li>Tabel transfer</li>
 </ul>
-<img src="documentation/ERD-Amar-Bank-Digital-Bisnis.png" alt="ERD">
+<img src="documentation/Ambizz.png" alt="ERD">
 
 ### API
 Sistem ini memiliki berbagai endpoint sebagai berikut:
