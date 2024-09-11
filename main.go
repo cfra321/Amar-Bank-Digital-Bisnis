@@ -33,6 +33,11 @@ func main() {
 		os.Getenv("PGUSER"),
 		os.Getenv("PGPASSWORD"),
 		os.Getenv("PGDATABASE"),
+		// os.Getenv("DB_HOST"),
+		// os.Getenv("DB_PORT"),
+		// os.Getenv("DB_USER"),
+		// os.Getenv("DB_PASSWORD"),
+		// os.Getenv("DB_NAME"),
 	)
 
 	DB, err = sql.Open("postgres", psqlInfo)
@@ -69,10 +74,10 @@ func main() {
 	{
 
 		// Route untuk register
-		router.POST("/api/register", controllers.RegisterUser)
+		router.POST("/register", controllers.RegisterUser)
 
 		// Route untuk login
-		router.POST("/api/auth/login", controllers.Login)
+		router.POST("/login", controllers.Login)
 
 		authorized := router.Group("/")
 		authorized.Use(middleware.JWTAuthMiddleware())
