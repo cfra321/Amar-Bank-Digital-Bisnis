@@ -91,3 +91,42 @@ FROM
     accounts a
 JOIN
     users u ON a.user_id = u.id;
+
+-- untuk mengecek pengguna yang sudah terdaftar di tabel users namun belum memiliki akun di tabel accounts, Anda dapat menggunakan query SQL berikut:
+SELECT
+    u.id AS user_id,
+    u.username,
+    u.email,
+    u.phonenumber
+FROM
+    users u
+LEFT JOIN
+    accounts a ON u.id = a.user_id
+WHERE
+    a.user_id IS NULL;
+
+-- MENGABUNGNA TABEL USERS DAN ACCOUNTS
+SELECT
+    u.id AS user_id,
+    u.username,
+    u.email,
+    u.phonenumber,
+    u.password,
+    u.is_active,
+    u.created_at AS user_created_at,
+    u.created_by,
+    u.modified_at,
+    u.modified_by,
+    u.activated_by,
+    u.activated_at,
+    a.id AS account_id,
+    a.account_number,
+    a.balance,
+    a.account_type,
+    a.created_at AS account_created_at
+FROM
+    public.users u
+LEFT JOIN
+    public.accounts a ON u.id = a.user_id
+ORDER BY
+    u.id ASC;

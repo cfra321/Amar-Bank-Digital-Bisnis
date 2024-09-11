@@ -69,28 +69,28 @@ func main() {
 	{
 
 		// Route untuk register
-		router.POST("/register", controllers.RegisterUser)
+		router.POST("/api/register", controllers.RegisterUser)
 
 		// Route untuk login
-		router.POST("/login", controllers.Login)
+		router.POST("/api/auth/login", controllers.Login)
 
 		authorized := router.Group("/")
 		authorized.Use(middleware.JWTAuthMiddleware())
 		{
 			// Endpoint untuk update status pengguna
-			authorized.PUT("/users/:id/status", controllers.UpdateUserStatus)
-			authorized.GET("/users", controllers.GetAllUsers)
-			authorized.GET("/users/:id", controllers.GetUserByID)
-			authorized.DELETE("/users/:id", controllers.DeleteUser)
+			authorized.PUT("/api/users/:id/status", controllers.UpdateUserStatus)
+			authorized.GET("/api/users", controllers.GetAllUsers)
+			authorized.GET("/api/users/:id", controllers.GetUserByID)
+			authorized.DELETE("/api/users/:id", controllers.DeleteUser)
 
-			authorized.POST("/users/accounts", controllers.CreateAccount)
-			authorized.GET("/users/:id/accounts", controllers.GetAccountsByID)
-			authorized.GET("/users/accounts", controllers.GetAllAccounts)
-			authorized.GET("/users/account-number/:account_number", controllers.GetAccountByAccountNumber)
+			authorized.POST("/api/accounts", controllers.CreateAccount)
+			authorized.GET("/api/accounts", controllers.GetAllAccounts)
+			authorized.GET("/api/:id/accounts", controllers.GetAccountsByID)
+			authorized.GET("/api/account-number/:account_number", controllers.GetAccountByAccountNumber)
 
-			authorized.POST("/users/transfer", controllers.TransferOverBooking)
+			authorized.POST("/api/transactions/transfer", controllers.TransferOverBooking)
 
-			authorized.GET("/users/transaction_logs", controllers.GetAllTransactionLogs)
+			authorized.GET("/api/transaction_logs", controllers.GetAllTransactionLogs)
 		}
 
 	}

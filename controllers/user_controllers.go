@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -199,12 +200,16 @@ func GetUserByID(c *gin.Context) {
 
 func DeleteUser(c *gin.Context) {
 	id := c.Param("id")
+
 	err := repository.DeleteUser(database.DbConnection, id)
 	if err != nil {
+		log.Printf("Error deleting user: %v", err)
+
 		if err.Error() == "id not found" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "User ID not found"})
 			return
 		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not delete user"})
 		return
 	}

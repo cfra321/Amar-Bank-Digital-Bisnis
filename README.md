@@ -1,157 +1,74 @@
-/**
- * Project: AMAR-BANK-DIGITAL-BISNIS
- * 
- * This project is designed to handle digital banking operations for Amar Bank.
- * It includes functionalities such as account management, transaction processing,
- * customer service, and reporting.
- * 
- * Key Features:
- * - Account Management: Create, update, and delete customer accounts.
- * - Transaction Processing: Handle deposits, withdrawals, and transfers.
- * - Customer Service: Provide support for customer inquiries and issues.
- * - Reporting: Generate financial reports and summaries.
- * 
- * Modules:
- * - Authentication: Manages user login and security.
- * - Accounts: Handles account-related operations.
- * - Transactions: Processes financial transactions.
- * - Support: Manages customer support tickets and inquiries.
- * - Reports: Generates and exports various financial reports.
- * 
- * Usage:
- * - Ensure all dependencies are installed.
- * - Configure the application settings in the config file.
- * - Run the application using the provided scripts.
- * 
- * Note:
- * - This project requires a secure database connection.
- * - Ensure compliance with financial regulations and data protection laws.
- * 
- * Author: [Your Name]
- * Date: [Date]
- */
+# AMARA-BANK-DIGITAL-BISNIS
 
-## API Documentation
+<ul>
+<li>Nama : Kukuh Wicaksono</li>
+<li>Proyek Akhir Bootcamp Golang Batch 59</li>
+</ul>
 
-### Authentication
+### Resource:
+<ul>
+<li>Github : https://github.com/cfra321/Amar-Bank-Digital-Bisnis</li>
+<li>Deploy Railway : [Railway Deployment Link]</li>
+<li>Documentation Postman : [Postman Documentation Link]</li>
+<li>PPT : [Google Slides Link]</li>
+</ul>
 
-#### Login
-- **Endpoint:** `/api/auth/login`
-- **Method:** `POST`
-- **Parameters:**
-    - `username` (string): The username of the user.
-    - `password` (string): The password of the user.
-- **Response:**
-    ```json
-    {
-        "token": "your-jwt-token",
-        "expires_in": 3600
-    }
-    ```
+### ERD
+Sistem ini memiliki tabel-tabel berikut:
+<ul>
+<li>Tabel users</li>
+<li>Tabel accounts</li>
+<li>Tabel transactions_log</li>
+<li>Tabel transfer</li>
+</ul>
+<img src="documentation/ERD-Amar-Bank-Digital-Bisnis.png" alt="ERD">
 
-#### Register
-- **Endpoint:** `/api/auth/register`
-- **Method:** `POST`
-- **Parameters:**
-    - `username` (string): The desired username.
-    - `password` (string): The desired password.
-    - `email` (string): The user's email address.
-- **Response:**
-    ```json
-    {
-        "message": "User registered successfully"
-    }
-    ```
+### API
+Sistem ini memiliki berbagai endpoint sebagai berikut:
 
-### Accounts
+## Endpoint Main
+Endpoint utama.
+Method | Path | Keterangan | Auth
+------------- | ------------- | ------------- | -------------
+***GET*** | *`/`* | Menampilkan identitas pembuat API | -
 
-#### Create Account
-- **Endpoint:** `/api/accounts`
-- **Method:** `POST`
-- **Parameters:**
-    - `name` (string): The name of the account holder.
-    - `initial_balance` (number): The initial balance of the account.
-- **Response:**
-    ```json
-    {
-        "account_id": "new-account-id",
-        "message": "Account created successfully"
-    }
-    ```
+## Endpoint Auth
+Endpoint ini menangani autentikasi pengguna.
+Method | Path | Keterangan | Auth
+------------- | ------------- | ------------- | -------------
+***POST*** | *`/api/auth/login`* | Menghasilkan token autentikasi | -
+***POST*** | *`/api/register`* | Mendaftarkan pengguna baru | -
 
-#### Get Account Details
-- **Endpoint:** `/api/accounts/{account_id}`
-- **Method:** `GET`
-- **Parameters:**
-    - `account_id` (string): The ID of the account.
-- **Response:**
-    ```json
-    {
-        "account_id": "account-id",
-        "name": "account holder name",
-        "balance": 1000
-    }
-    ```
+## Endpoint Users
+Endpoint ini mengelola akun pengguna, termasuk registrasi, pembaruan status, pengambilan data, dan penghapusan pengguna.
 
-### Transactions
+Method | Path | Keterangan | Auth
+------------- | ------------- | ------------- | -------------
+***PUT*** | *`/api/users/:id/status`* | Mengupdate status aktif pengguna berdasarkan ID | token
+***GET*** | *`/api/users`* | Mengambil data semua pengguna | token
+***GET*** | *`/api/users/:id`* | Mengambil data pengguna berdasarkan ID | token
+***DELETE*** | *`/api/users/:id`* | Menghapus pengguna berdasarkan ID | token
 
-#### Deposit
-- **Endpoint:** `/api/transactions/deposit`
-- **Method:** `POST`
-- **Parameters:**
-    - `account_id` (string): The ID of the account.
-    - `amount` (number): The amount to deposit.
-- **Response:**
-    ```json
-    {
-        "message": "Deposit successful",
-        "new_balance": 1500
-    }
-    ```
+## Endpoint Accounts
+Endpoint ini mengelola account bank user.
+Method | Path | Keterangan | Auth
+------------- | ------------- | ------------- | -------------
+***POST*** | *`/api/accounts`* | Membuat akun baru | token
+***GET*** | *`/api/accounts/{account_id}`* | Mendapatkan detail akun | token
+***GET*** | *`/api/accounts`* | Mendapatkan semua akun | token
+***GET*** | *`/api/accounts/account-number/{account_number}`* | Mendapatkan akun berdasarkan nomor | token
 
-#### Withdraw
-- **Endpoint:** `/api/transactions/withdraw`
-- **Method:** `POST`
-- **Parameters:**
-    - `account_id` (string): The ID of the account.
-    - `amount` (number): The amount to withdraw.
-- **Response:**
-    ```json
-    {
-        "message": "Withdrawal successful",
-        "new_balance": 500
-    }
-    ```
+## Endpoint Transactions
+Endpoint ini mengelola transaksi keuangan.
+Method | Path | Keterangan | Auth
+------------- | ------------- | ------------- | -------------
+***POST*** | *`/api/transactions/deposit`* | Menyetor dana ke akun | token
+***POST*** | *`/api/transactions/withdraw`* | Menarik dana dari akun | token
+***POST*** | *`/api/transactions/transfer`* | Melakukan transfer antar akun | token
 
-### Customer Service
+## Endpoint Reporting
+Endpoint ini menghasilkan laporan log mutasi transfer.
+Method | Path | Keterangan | Auth
+------------- | ------------- | ------------- | -------------
+***GET*** | *`/api/reports/generate`* |  mutasi transfer | token
 
-#### Create Support Ticket
-- **Endpoint:** `/api/support/tickets`
-- **Method:** `POST`
-- **Parameters:**
-    - `customer_id` (string): The ID of the customer.
-    - `issue` (string): The issue description.
-- **Response:**
-    ```json
-    {
-        "ticket_id": "new-ticket-id",
-        "message": "Support ticket created successfully"
-    }
-    ```
-
-### Reporting
-
-#### Generate Report
-- **Endpoint:** `/api/reports/generate`
-- **Method:** `POST`
-- **Parameters:**
-    - `report_type` (string): The type of report (e.g., "monthly", "annual").
-- **Response:**
-    ```json
-    {
-        "report_id": "new-report-id",
-        "message": "Report generated successfully"
-    }
-    ```
-
-Pastikan untuk mengganti [Your Name] dan [Date] dengan informasi yang sesuai. Dokumentasi ini memberikan gambaran umum tentang bagaimana menggunakan API dari proyek Anda. Anda bisa menambahkan lebih banyak detail sesuai kebutuhan proyek Anda.
