@@ -71,33 +71,29 @@ func main() {
 
 	// Use the CORSMiddleware
 	router.Use(middleware.CORSMiddleware())
+
+	// Route untuk register
+	router.POST("/register", controllers.RegisterUser)
+
+	// Route untuk login
+	router.POST("/login", controllers.Login)
+
+	authorized := router.Group("/")
+	authorized.Use(middleware.JWTAuthMiddleware())
 	{
+		// Endpoint untuk update status pengguna
+		authorized.PUT("/api/users/:id/status", controllers.UpdateUserStatus)
+		authorized.GET("/api/users", controllers.GetAllUsers)
+		authorized.GET("/api/users/:id", controllers.GetUserByID)
+		authorized.DELETE("/api/users/:id", controllers.DeleteUser)
 
-		// Route untuk register
-		router.POST("/register", controllers.RegisterUser)
+		authorized.POST("/api/accounts", controllers.CreateAccount)
+		authorized.GET("/api/accounts", controllers.GetAllAccounts)
+		authorized.GET("/api/:id/accounts", controllers.GetAccountsByID)
+		authorized.GET("/api/account-number/:account_number", controllers.GetAccountByAccountNumber)
 
-		// Route untuk login
-		router.POST("/login", controllers.Login)
-
-		authorized := router.Group("/")
-		authorized.Use(middleware.JWTAuthMiddleware())
-		{
-			// Endpoint untuk update status pengguna
-			authorized.PUT("/api/users/:id/status", controllers.UpdateUserStatus)
-			authorized.GET("/api/users", controllers.GetAllUsers)
-			authorized.GET("/api/users/:id", controllers.GetUserByID)
-			authorized.DELETE("/api/users/:id", controllers.DeleteUser)
-
-			authorized.POST("/api/accounts", controllers.CreateAccount)
-			authorized.GET("/api/accounts", controllers.GetAllAccounts)
-			authorized.GET("/api/:id/accounts", controllers.GetAccountsByID)
-			authorized.GET("/api/account-number/:account_number", controllers.GetAccountByAccountNumber)
-
-			authorized.POST("/api/transactions/transfer", controllers.TransferOverBooking)
-
-			authorized.GET("/api/transaction_logs", controllers.GetAllTransactionLogs)
-		}
-
+		authorized.POST("/api/transactions/transfer", controllers.TransferOverBooking)
+		authorized.GET("/api/transaction_logs", controllers.GetAllTransactionLogs)
 	}
 
 	router.Run(":" + os.Getenv("PORT"))
