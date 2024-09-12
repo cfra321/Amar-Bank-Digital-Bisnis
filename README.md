@@ -8,9 +8,9 @@
 ### Resource:
 <ul>
 <li>Github : https://github.com/cfra321/Amar-Bank-Digital-Bisnis</li>
-<li>Deploy Railway : [Railway Deployment Link]</li>
+<li>Deploy Railway : https://amar-bank-digital-bisnis-production-v1.up.railway.app </li>
 <li>Documentation Postman : [Postman Documentation Link]</li>
-<li>PPT : [Google Slides Link]</li>
+<li>PPT : https://drive.google.com/file/d/1oQFp7DUgIx6WOXWTSFWFOA4UCvfk9tN-/view?usp=sharing</li>
 </ul>
 
 ### ERD
