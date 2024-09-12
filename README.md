@@ -8,7 +8,7 @@
 ### Resource:
 <ul>
 <li>Github : https://github.com/cfra321/Amar-Bank-Digital-Bisnis</li>
-<li>Deploy Railway : [Railway Deployment Link]</li>
+<li>Deploy Railway : https://amar-bank-digital-bisnis-production-v1.up.railway.app</li>
 <li>Documentation Postman : [Postman Documentation Link]</li>
 <li>PPT : [Google Slides Link]</li>
 </ul>
