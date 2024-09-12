@@ -6,14 +6,13 @@ import (
 	"log"
 	"os"
 
+	"github.com/cfra321/Amar-Bank-Digital-Bisnis/controllers"
 	"github.com/cfra321/Amar-Bank-Digital-Bisnis/database"
 	"github.com/cfra321/Amar-Bank-Digital-Bisnis/middleware"
+	"github.com/cfra321/Amar-Bank-Digital-Bisnis/seeder"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-
-	"github.com/cfra321/Amar-Bank-Digital-Bisnis/controllers"
-	"github.com/cfra321/Amar-Bank-Digital-Bisnis/seeder"
 )
 
 var (
@@ -22,34 +21,19 @@ var (
 )
 
 func main() {
+	// Load environment variables from .env file
 	err = godotenv.Load("config/.env")
 	if err != nil {
-		panic("Error loading .env file")
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
+	// Database connection
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		os.Getenv("PGHOST"),
-		os.Getenv("PGPORT"),
-		os.Getenv("PGUSER"),
-		os.Getenv("PGPASSWORD"),
-		os.Getenv("PGDATABASE"),
 		// os.Getenv("DB_HOST"),
-		// os.Getenv("DB_PORT"),
+		// os.Getenv("PGHOST"),
 		// os.Getenv("DB_USER"),
 		// os.Getenv("DB_PASSWORD"),
 		// os.Getenv("DB_NAME"),
-	)
-
-	DB, err = sql.Open("postgres", psqlInfo)
-	defer DB.Close()
-	err = DB.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	database.DBMigrate(DB)
-
-	psqlSeeder := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("PGHOST"),
 		os.Getenv("PGPORT"),
 		os.Getenv("PGUSER"),
@@ -57,45 +41,61 @@ func main() {
 		os.Getenv("PGDATABASE"),
 	)
 
-	DB, err = sql.Open("postgres", psqlSeeder)
+	DB, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
-		log.Fatalf("Could not connect to the database: %v", err)
+		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 	defer DB.Close()
 
-	// Seed the database
-	seeder.SeedUsers(DB)
-	fmt.Println("Successfully connected!")
+	err = DB.Ping()
+	if err != nil {
+		log.Fatalf("Could not ping the database: %v", err)
+	}
 
+	// Run migrations
+	database.DBMigrate(DB)
+
+	// Seed the database with initial data
+	seeder.SeedUsers(DB)
+
+	fmt.Println("Successfully connected to the database!")
+
+	// Setup Gin router
 	router := gin.Default()
 
-	// Use the CORSMiddleware
+	// Use CORS middleware
 	router.Use(middleware.CORSMiddleware())
 
-	// Route untuk register
-	router.POST("/register", controllers.RegisterUser)
+	// Public routes
+	router.POST("/api/register", controllers.RegisterUser)
+	router.POST("/api/auth/login", controllers.Login)
 
-	// Route untuk login
-	router.POST("/login", controllers.Login)
-
+	// Protected routes with JWT middleware
 	authorized := router.Group("/")
 	authorized.Use(middleware.JWTAuthMiddleware())
 	{
-		// Endpoint untuk update status pengguna
+		// User management routes
 		authorized.PUT("/api/users/:id/status", controllers.UpdateUserStatus)
 		authorized.GET("/api/users", controllers.GetAllUsers)
 		authorized.GET("/api/users/:id", controllers.GetUserByID)
 		authorized.DELETE("/api/users/:id", controllers.DeleteUser)
 
+		// Account management routes
 		authorized.POST("/api/accounts", controllers.CreateAccount)
 		authorized.GET("/api/accounts", controllers.GetAllAccounts)
 		authorized.GET("/api/:id/accounts", controllers.GetAccountsByID)
 		authorized.GET("/api/account-number/:account_number", controllers.GetAccountByAccountNumber)
 
+		// Transaction routes
 		authorized.POST("/api/transactions/transfer", controllers.TransferOverBooking)
 		authorized.GET("/api/transaction_logs", controllers.GetAllTransactionLogs)
 	}
 
+	// Start the server
 	router.Run(":" + os.Getenv("PORT"))
-	// router.Run(":8080")
+	// port := os.Getenv("PORT")
+	// if port == "" {
+	// 	port = "8080"
+	// }
+	// router.Run(":" + port)
 }
